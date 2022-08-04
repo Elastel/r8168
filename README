@@ -1,0 +1,14 @@
+<Quick install with proper kernel settings>
+	Download the source :
+		# git clone https://github.com/Elastel/r8168.git
+
+	Change to the directory:
+		# cd r8168
+
+	If you are running the target kernel, then you should be able to do :
+
+		# ./autorun.sh	(as root or with sudo)
+
+	You can check whether the driver is loaded by using following commands.
+
+		# lsmod | grep r8168
