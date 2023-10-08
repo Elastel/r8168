@@ -33,12 +33,21 @@ module=`ls src/*.ko`
 module=${module#src/}
 module=${module%.ko}
 
+kernel_version=$(uname -r | awk -F '.' '{print $1}')
+kernel_module=''
+
+if [ $kernel_version = "6" ]; then
+	kernel_module=r8169.ko.xz
+else
+	kernel_module=r8169.ko
+fi
+
 if [ "$module" = "" ]; then
 	echo "No driver exists!!!"
 	exit 1
 elif [ "$module" != "r8169" ]; then
-	if test -e $TARGET_PATH/r8169.ko ; then
-		echo "Backup r8169.ko"
+	if test -e $TARGET_PATH/$kernel_module ; then
+		echo "Backup $kernel_module"
 		if test -e $TARGET_PATH/r8169.bak ; then
 			i=0
 			while test -e $TARGET_PATH/r8169.bak$i
@@ -46,10 +55,10 @@ elif [ "$module" != "r8169" ]; then
 				i=$(($i+1))
 			done
 			echo "rename r8169.ko to r8169.bak$i"
-			mv $TARGET_PATH/r8169.ko $TARGET_PATH/r8169.bak$i
+			mv $TARGET_PATH/$kernel_module $TARGET_PATH/r8169.bak$i
 		else
 			echo "rename r8169.ko to r8169.bak"
-			mv $TARGET_PATH/r8169.ko $TARGET_PATH/r8169.bak
+			mv $TARGET_PATH/$kernel_module $TARGET_PATH/r8169.bak
 		fi
 	fi
 fi
